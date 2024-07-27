@@ -1,0 +1,64 @@
+<div id="addDataGuru" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addDataGuru" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="standard-modalLabel">Tambah Data</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form method="POST" novalidate id="addDataGuruForm" action="{{route('data-guru.store')}}">
+                @csrf
+                @method('POST')
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label for="nip" class="form-label">NIP <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="number" name="nip" required id="nip" class="form-control"
+                            placeholder="Masukkan NIP">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="name" class="form-label">Nama Guru <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="text" name="name" required id="name" class="form-control"
+                            placeholder="Masukkan Nama Guru">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="email" class="form-label">Email <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="email" name="email" required id="email" class="form-control"
+                            placeholder="Masukkan Email">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="tempat_lahir" class="form-label">Tempat Lahir <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="text" name="tempat_lahir" required id="tempat_lahir" class="form-control"
+                            placeholder="Masukkan Tempat Lahir">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="date" name="tanggal_lahir" required id="tanggal_lahir" class="form-control">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="jenis_kelamin" class="form-label">Jenis Kelamin <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <select name="jenis_kelamin" id="jenis_kelamin" class="form-control form-select">
+                            <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                            <option value="laki-laki">Laki-Laki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    {{-- <div class="form-group mb-2">
+                        <label for="no_wa_ortu" class="form-label">Nomor Whatsapp Orang Tua <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="text" name="no_wa_ortu" required id="no_wa_ortu" class="form-control"
+                            placeholder="082122112211">
+                    </div> --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan Data</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
