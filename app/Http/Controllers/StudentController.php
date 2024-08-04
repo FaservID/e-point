@@ -6,6 +6,7 @@ use App\Models\Kelas;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -17,15 +18,26 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+           
+
             $data = Student::latest();
 
+            // Apply 'kelas' filter if it exists in the request
             $kelas = $request->input('kelasFilter');
-            if (isset($kelas)) {
+            if (!empty($kelas)) {
                 $data = $data->whereRelation('kelas', 'id', $kelas);
             }
-
+            
+            // Apply additional filtering if the user is a teacher and not a guidance counselor
+            if (Auth::user()->type == 'guru' && Auth::user()->is_guru_bk == 'false') {
+                $data = $data->whereHas('kelas', function($query) {
+                    $query->where('user_id', Auth::user()->id);
+                });
+            }
+            
+            // Get the final result set
             $data = $data->get();
-
+            
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nisn', function ($row) {
@@ -38,15 +50,15 @@ class StudentController extends Controller
                     return '<span>' . $row->kelas->nama_kelas . '</span>';
                 })
                 ->addColumn('jenis_kelamin', function ($row) {
-                    return '<span>' . $row->jenis_kelamin . '</span>';
+                    return '<span>' . ucWords($row->jenis_kelamin) . '</span>';
                 })
-                ->addColumn('alamat', function ($row) {
-                    return '<span>' . $row->alamat . '</span>';
+                ->addColumn('ttl', function ($row) {
+                    return '<span>' . $row->tempat . ', ' . Carbon::parse($row->tanggal_lahir)->format('d F Y') .  '</span>';
                 })
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nisn', 'student_name', 'kelas', 'jenis_kelamin', 'alamat', 'latest'])
+                ->rawColumns(['nisn', 'student_name', 'kelas', 'jenis_kelamin', 'ttl', 'latest'])
                 ->toJson();
         }
         $kelas = Kelas::all();
@@ -86,17 +98,30 @@ class StudentController extends Controller
                 'jenis_kelamin' => 'required',
                 'kelas_id' => 'required',
                 'no_wa_ortu' => 'required',
+                'tempat' => 'required',
+                'tanggal_lahir' => 'required',
             ]);
-
-            Student::create($request->all());
+    
+            $data = [
+                'nisn' => $request->nisn,
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'kelas_id' => $request->kelas_id,
+                'no_wa_ortu' => $request->no_wa_ortu,
+                'tempat' => $request->tempat,
+                'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
+            ];
+            Student::create($data);
             Alert::success('Yeay🥳', 'Berhasil Menyimpan Data');
-
+    
             return redirect()->route('data-siswa.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage());
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
+    
 
     /**
      * Display the specified resource.
@@ -127,15 +152,19 @@ class StudentController extends Controller
                 'jenis_kelamin' => 'required',
                 'kelas_id' => 'required',
                 'no_wa_ortu' => 'required',
+                'tempat' => 'required',
+                'tanggal_lahir' => 'required',
             ]);
 
             $data = [
                 'nisn' => $request->nisn,
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
-                'kelas_id' => $request->kelas_id,
                 'jenis_kelamin' => $request->jenis_kelamin,
+                'kelas_id' => $request->kelas_id,
                 'no_wa_ortu' => $request->no_wa_ortu,
+                'tempat' => $request->tempat,
+                'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
             ];
 
             Student::where('id', $id)->update($data);
@@ -144,7 +173,7 @@ class StudentController extends Controller
             return redirect()->route('data-siswa.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

@@ -51,7 +51,7 @@ class JenisSanksiController extends Controller
     {
         try {
             $request->validate([
-                'total_poin' => 'required',
+                'total_poin' => 'required|numeric',
                 'tindakan_sanksi' => 'required',
             ]);
 
@@ -62,7 +62,7 @@ class JenisSanksiController extends Controller
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
 
-            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage());
+            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage())->withInput();
         }
     }
 
@@ -102,7 +102,7 @@ class JenisSanksiController extends Controller
     {
         try {
             $request->validate([
-                'total_poin' => 'required',
+                'total_poin' => 'required|numeric',
                 'tindakan_sanksi' => 'required',
             ]);
 
@@ -112,7 +112,7 @@ class JenisSanksiController extends Controller
             return redirect()->route('jenis-sanksi.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

@@ -38,6 +38,7 @@
                                     <th style="width: 2%">#</th>
                                     <th>NIP</th>
                                     <th>Nama Guru</th>
+                                    <th>Wali Kelas</th>
                                     <th>Email</th>
                                     <th>L/P</th>
                                     <th>TTL</th>
@@ -96,6 +97,10 @@
                     {
                         data: 'name',
                         className: ''
+                    },
+                    {
+                        data: 'kelas_name',
+                        className: 'dt-center'
                     },
                     {
                         data: 'email',

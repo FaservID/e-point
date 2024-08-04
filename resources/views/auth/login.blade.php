@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Log In | MTS MUBA</title>
+    <title>Log In | MTSN 1 MUBA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
@@ -31,7 +31,7 @@
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
                             <a href="index.html">
-                                <h3 class="text-white">MTS MUSI BANYUASIN</h3>
+                                <h3 class="text-white">MTSN 1 MUBA</h3>
                             </a>
                         </div>
 

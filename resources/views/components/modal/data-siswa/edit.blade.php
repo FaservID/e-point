@@ -22,6 +22,17 @@
                             placeholder="Masukkan Nama Siswa">
                     </div>
                     <div class="form-group mb-2">
+                        <label for="tempat" class="form-label">Tempat Lahir <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="text" name="tempat" required id="tempat_edit" class="form-control"
+                            placeholder="Masukkan Tempat Lahir">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="tanggal" class="form-label">Tanggal Lahir <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="date" name="tanggal_lahir" required id="tanggal_lahir_edit" class="form-control">
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="alamat" class="form-label">Alamat <span class="text-danger">*<sup>) Harap
                                     Diisi</sup></span></label>
                         <textarea name="alamat" id="alamat_edit" required cols="30" rows="5" class="form-control"></textarea>

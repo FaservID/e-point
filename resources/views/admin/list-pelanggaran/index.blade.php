@@ -27,6 +27,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">List Pelanggaran</h5>
+                        <button class="btn btn-sm btn-warning" onclick="resetPoint()">Reset Point</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -40,6 +41,7 @@
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
                                     <th>Status</th>
+                                    <th>Kategori Pelanggaran</th>
                                     <th>Catatan</th>
                                     <th>Last Update</th>
                                     <th>Aksi</th>
@@ -102,7 +104,11 @@
                         className: 'dt-center',
                     },
                     {
-                        data: 'status',
+                        data: 'status_pelanggaran',
+                        className: 'dt-center',
+                    },
+                    {
+                        data: 'kategori_pelanggaran',
                         className: 'dt-center',
                     },
                     {
@@ -122,16 +128,17 @@
                 ],
                 pageLength: 10,
                 columnDefs: [{
-                    targets: -1,
+                    targets: 8,
                     searchable: false,
                     title: 'Actions',
                     className: 'dt-center',
                     orderable: false,
                     render: function(data, type, full) {
                         var id = full['id'];
+                        var status = full['status'];
                         var validateButton =
                             `<a href="javascript:void(0)" class="btn btn-primary btn-sm me-1" onclick="showValidateConfirmation(${id})"><i class="mdi mdi-check"></i>`
-                        if(full['status'] == 'true') {
+                        if(status == 'true') {
                             return '-';
                         } else {
                             return (
@@ -229,6 +236,61 @@
                     $.ajax({
                         url: `/admin/list-pelanggaran/${id}/validate`,
                         type: 'PUT',
+                        cache: false,
+                        success: function(response) {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Yeay 🥳',
+                                    text: response.message,
+                                    timerProgressBar: true,
+                                    timer: 2000,
+                                }).then((result) => {
+                                    window.location.href =
+                                        "{{ route('list-pelanggaran.index') }}"
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oppss, Something went wrong',
+                                    text: response.message,
+                                    timerProgressBar: true,
+                                    timer: 2000,
+                                })
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Oppss, Something went wrong!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        function resetPoint() {
+            Swal.fire({
+                title: 'Reset Point?',
+                text: 'Reset point hanya dilakukan ketika sudah memasuki semester baru!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reset',
+                cancelButtonText: 'Batal',
+                focusConfirm: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: `/admin/list-pelanggaran/reset-point`,
+                        type: 'POST',
                         cache: false,
                         success: function(response) {
                             if (response.status == 200) {

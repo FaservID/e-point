@@ -10,28 +10,35 @@
                 @method('POST')
                 <div class="modal-body">
                     <div class="form-group mb-2">
-                        <label for="student_id" class="form-label">Nama Siswa <span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
+                        <label for="student_id" class="form-label">Nama Siswa <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
                         <select name="student_id" id="student_id" class="form-select form-control select2">
                             <option value="" selected disabled>-- Pilih Siswa --</option>
                             @foreach ($students as $student)
-                                <option value="{{$student->id}}">{{$student->nama}} :: Kelas {{$student->kelas->nama_kelas}}</option>
+                                <option value="{{$student->id}}" {{ old('student_id') == $student->id ? 'selected' : '' }}>{{$student->nama}} :: Kelas {{$student->kelas->nama_kelas}}</option>
                             @endforeach
                         </select>
+                        @if ($errors->has('student_id'))
+                            <span class="text-danger">{{ $errors->first('student_id') }}</span>
+                        @endif
                     </div>
                     <div class="form-group mb-2">
-                        <label for="kategori_id" class="form-label">Kategori Pelanggaran<span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
+                        <label for="kategori_id" class="form-label">Kategori Pelanggaran <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
                         <select name="kategori_id" id="kategori_id" class="form-select form-control select2">
-                            <option value="" selected disabled>-- Pilih Siswa --</option>
+                            <option value="" selected disabled>-- Pilih Kategori Pelanggaran --</option>
                             @foreach ($categories as $category)
-                                <option value="{{$category->id}}">{{$category->kategori_pelanggaran}} - Point {{$category->poin}}</option>
+                                <option value="{{$category->id}}" {{ old('kategori_id') == $category->id ? 'selected' : '' }}>{{$category->kategori_pelanggaran}} - Point {{$category->poin}}</option>
                             @endforeach
                         </select>
+                        @if ($errors->has('kategori_id'))
+                            <span class="text-danger">{{ $errors->first('kategori_id') }}</span>
+                        @endif
                     </div>
                     <div class="form-group mb-2">
                         <label for="catatan" class="form-label">Pelanggaran <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
-                        <textarea name="catatan" id="catatan" required cols="30" rows="10" class="form-control"></textarea>
+                        <textarea name="catatan" id="catatan" required cols="30" rows="10" class="form-control">{{ old('catatan') }}</textarea>
+                        @if ($errors->has('catatan'))
+                            <span class="text-danger">{{ $errors->first('catatan') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -48,7 +48,7 @@
                    <li class="side-nav-title">Navigation</li>
 
                    <li class="side-nav-item">
-                       <a href="{{ route('home') }}" class="side-nav-link">
+                       <a href="{{ route('admin.home') }}" class="side-nav-link">
                            <i class="uil-home-alt"></i>
                            <span> Dashboards </span>
                        </a>
@@ -101,13 +101,13 @@
                    </li>
 
                    <li class="side-nav-item">
-                       <a href="#" class="side-nav-link">
+                       <a href="{{ route('admin.laporan.index') }}" class="side-nav-link">
                            <i class="uil-rss"></i>
                            <span> Laporan </span>
                        </a>
                    </li>
                    <li class="side-nav-item">
-                       <a href="#" class="side-nav-link">
+                       <a href="{{ route('manajemen-user.index') }}" class="side-nav-link">
                            <i class="mdi mdi-progress-clock"></i>
                            <span> Manajemen Akun </span>
                        </a>
@@ -130,7 +130,7 @@
                    <li class="side-nav-title">Navigation</li>
 
                    <li class="side-nav-item">
-                       <a href="{{ route('home') }}" class="side-nav-link">
+                       <a href="{{ route('guru.home') }}" class="side-nav-link">
                            <i class="uil-home-alt"></i>
                            <span> Dashboards </span>
                        </a>
@@ -139,38 +139,81 @@
                    <li class="side-nav-title">Menus</li>
 
                    <li class="side-nav-item">
-                       <a href="{{route('guru.data-siswa.index')}}" class="side-nav-link">
+                       <a href="{{ route('guru.data-siswa.index') }}" class="side-nav-link">
                            <i class="mdi mdi-progress-clock"></i>
                            <span> Data Siswa </span>
                        </a>
                    </li>
 
                    <li class="side-nav-item">
-                       <a href="{{route('guru.kategori-pelanggaran.index')}}" class="side-nav-link">
+                       <a href="{{ route('guru.kategori-pelanggaran.index') }}" class="side-nav-link">
                            <i class="uil-rss"></i>
                            <span> Kategori Pelanggaran </span>
                        </a>
                    </li>
                    <li class="side-nav-item">
-                       <a href="{{route('guru.jenis-sanksi.index')}}" class="side-nav-link">
+                       <a href="{{ route('guru.jenis-sanksi.index') }}" class="side-nav-link">
                            <i class="uil-rss"></i>
                            <span> Jenis Sanksi </span>
                        </a>
                    </li>
                    <li class="side-nav-item">
-                       <a href="{{route('guru.list-pelanggaran.index')}}" class="side-nav-link">
+                       <a href="{{ route('guru.list-pelanggaran.index') }}" class="side-nav-link">
                            <i class="uil-rss"></i>
                            <span> List Pelanggaran </span>
                        </a>
                    </li>
+                   
+               </ul>
+               <!--- End Sidemenu -->
+           @endif
 
-                   {{-- <li class="side-nav-item">
-            <a href="{{ route('results.index') }}" class="side-nav-link">
-                <i class="mdi mdi-note-multiple-outline"></i>
-                <span> Hasil </span>
-            </a>
-        </li> --}}
+           @if (auth()->user()->type == 'eksekutif')
+               <!--- Sidemenu -->
+               <ul class="side-nav">
 
+                   <li class="side-nav-title">Navigation</li>
+
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.home') }}" class="side-nav-link">
+                           <i class="uil-home-alt"></i>
+                           <span> Dashboards </span>
+                       </a>
+                   </li>
+
+                   <li class="side-nav-title">Menus</li>
+
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.data-siswa.index') }}" class="side-nav-link">
+                           <i class="mdi mdi-progress-clock"></i>
+                           <span> Data Siswa </span>
+                       </a>
+                   </li>
+
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.kategori-pelanggaran.index') }}" class="side-nav-link">
+                           <i class="uil-rss"></i>
+                           <span> Kategori Pelanggaran </span>
+                       </a>
+                   </li>
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.jenis-sanksi.index') }}" class="side-nav-link">
+                           <i class="uil-rss"></i>
+                           <span> Jenis Sanksi </span>
+                       </a>
+                   </li>
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.list-pelanggaran.index') }}" class="side-nav-link">
+                           <i class="uil-rss"></i>
+                           <span> List Pelanggaran </span>
+                       </a>
+                   </li>
+                   <li class="side-nav-item">
+                       <a href="{{ route('eksekutif.laporan.index') }}" class="side-nav-link">
+                           <i class="uil-rss"></i>
+                           <span> Laporan </span>
+                       </a>
+                   </li>
                </ul>
                <!--- End Sidemenu -->
            @endif

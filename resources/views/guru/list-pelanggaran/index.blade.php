@@ -29,6 +29,31 @@
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">List Pelanggaran</h5>
                     </div>
+                    @if (auth()->user()->is_guru_bk == 'true' || auth()->user()->type == 'admin' || auth()->user()->type == 'eksekutif')
+
+                    <div class="d-flex justify-content-between align-items-center row py-2 gap-3 gap-md-0">
+                        <div class="col-md-6 siswa_filter">
+                            <!-- Dropdown untuk kategori proyek -->
+                            <label for="siswaFilter" class="form-label">Filter by Siswa</label>
+                            <select id="siswaFilter" name="kelas" class="form-select select2Filter">
+                                <option value="">All</option>
+                                @foreach ($students as $student)
+                                    <option value="{{ $student->id }}">{{ $student->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 kelas_filter">
+                            <!-- Dropdown untuk kategori proyek -->
+                            <label for="kelasFilter" class="form-label">Filter by Kelas</label>
+                            <select id="kelasFilter" name="kelas" class="form-select select2Filter">
+                                <option value="">All</option>
+                                @foreach ($kelas as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -40,9 +65,12 @@
                                     <th>NISN</th>
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
+                                    <th>Kategori Pelanggaran</th>
                                     <th>Catatan</th>
-                                    <th>Last Update</th>
+                                    <th>Dibuat Pada</th>
+                                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
                                     <th>Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,6 +98,7 @@
             $('.select2').select2({
                 dropdownParent: $('#addListPelanggaran')
             });
+            $('.select2Filter').select2();
             $('.select2Edit').select2({
                 dropdownParent: $('#editListPelanggaran')
             });
@@ -110,6 +139,10 @@
                         className: 'dt-center',
                     },
                     {
+                        data: 'kategori_pelanggaran',
+                        className: 'dt-center',
+                    },
+                    {
                         data: 'catatan',
                         className: '',
                     },
@@ -117,35 +150,41 @@
                         data: 'latest',
                         className: 'dt-center',
                     },
-                    {
-                        data: null,
-                        className: 'dt-center',
-                    },
+                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
+                        {
+                            data: null,
+                            className: 'dt-center',
+                        },
+                    @endif
                 ],
                 pageLength: 10,
-                columnDefs: [{
-                    targets: 6,
-                    searchable: false,
-                    title: 'Actions',
-                    className: 'dt-center',
-                    orderable: false,
-                    render: function(data, type, full) {
-                        var id = full['id'];
-                        var editButton =
-                            `<a href="javascript:void(0)" id="btn-edit" data-id="${id}" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-application-edit"></i>`
-                        var deleteButton =
-                            `<a href="javascript:void(0)" class="btn btn-danger btn-sm me-1" onclick="showDeleteConfirmation(${id})"><i class="mdi mdi-trash-can"></i>`
-                        if (full['status'] == 'true') {
-                            return '<button class="btn btn-sm btn-success"><i class="mdi mdi-check me-1"></i>Closed</button>';
-                        } else {
-                            return (
-                                '<span class="text-nowrap text-center">' + editButton +
-                                deleteButton + '</span>'
-                            );
+                columnDefs: [
+                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
+                        {
+                            targets: 7,
+                            searchable: false,
+                            title: 'Actions',
+                            className: 'dt-center',
+                            orderable: false,
+                            render: function(data, type, full) {
+                                var id = full['id'];
+                                var editButton =
+                                    `<a href="javascript:void(0)" id="btn-edit" data-id="${id}" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-application-edit"></i>`
+                                var deleteButton =
+                                    `<a href="javascript:void(0)" class="btn btn-danger btn-sm me-1" onclick="showDeleteConfirmation(${id})"><i class="mdi mdi-trash-can"></i>`
+                                if (full['status'] == 'true') {
+                                    return '<button class="btn btn-sm btn-success"><i class="mdi mdi-check me-1"></i>Closed</button>';
+                                } else {
+                                    return (
+                                        '<span class="text-nowrap text-center">' + editButton +
+                                        deleteButton + '</span>'
+                                    );
 
-                        }
-                    }
-                }, ],
+                                }
+                            }
+                        },
+                    @endif
+                ],
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -194,17 +233,19 @@
                             }
                         ]
                     },
-                    {
-                        text: 'New Data',
-                        className: 'btn btn-sm btn-primary mb-3 mb-md-0 ms-2',
-                        attr: {
-                            'data-bs-toggle': 'modal',
-                            'data-bs-target': '#addListPelanggaran'
-                        },
-                        init: function() {
-                            $(this).removeClass('btn-secondary');
+                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
+                        {
+                            text: 'New Data',
+                            className: 'btn btn-sm btn-primary mb-3 mb-md-0 ms-2',
+                            attr: {
+                                'data-bs-toggle': 'modal',
+                                'data-bs-target': '#addListPelanggaran'
+                            },
+                            init: function() {
+                                $(this).removeClass('btn-secondary');
+                            }
                         }
-                    }
+                    @endif
                 ],
                 "footerCallback": function(row, data, start, end, display) {
                     var api = this.api();
@@ -214,6 +255,13 @@
 
             });
             $('.dt-buttons > .btn-group > button').removeClass('btn-secondary');
+
+            $('#siswaFilter, #kelasFilter').change(function() {
+                var siswaFilter = $('#siswaFilter').val();
+                var kelasFilter = $('#kelasFilter').val();
+                // Memperbarui parameter ajax untuk filtering
+                table.ajax.url('{{ url()->current() }}?kelasFilter=' + kelasFilter + '&siswaFilter=' + siswaFilter).load();
+            });
         });
         $('body').on('click', '#btn-edit', function() {
             let itemId = $(this).data('id');

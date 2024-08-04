@@ -29,18 +29,21 @@
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">List Data Siswa</h5>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center row py-2 gap-3 gap-md-0">
-                        <div class="col-md-12 kelas_filter">
-                            <!-- Dropdown untuk kategori proyek -->
-                            <label for="kelasFilter" class="form-label">Filter by Kelas</label>
-                            <select id="kelasFilter" name="kelas" class="form-select select2">
-                                <option value="">All</option>
-                                @foreach ($kelas as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
-                                @endforeach
-                            </select>
+                    @if (auth()->user()->is_guru_bk == 'true' || auth()->user()->type == 'admin' || auth()->user()->type == 'eksekutif')
+                        <div class="d-flex justify-content-between align-items-center row py-2 gap-3 gap-md-0">
+                            <div class="col-md-12 kelas_filter">
+                                <!-- Dropdown untuk kategori proy   ek -->
+                                <label for="kelasFilter" class="form-label">Filter by Kelas</label>
+                                <select id="kelasFilter" name="kelas" class="form-select select2">
+                                    <option value="">All</option>
+                                    @foreach ($kelas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -52,8 +55,8 @@
                                     <th>NISN</th>
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Alamat</th>
+                                    <th>L/P</th>
+                                    <th>TTL</th>
                                     <th>Latest Update</th>
                                     @if (auth()->user()->type == 'admin')
                                         <th>Aksi</th>
@@ -125,7 +128,7 @@
                         className: 'dt-center',
                     },
                     {
-                        data: 'alamat',
+                        data: 'ttl',
                         className: 'dt-center',
                     },
                     {
@@ -264,6 +267,8 @@
                     // Set the selected value for kelas_id
                     $('#kelas_id_edit').val(response.data.kelas_id);
                     $('#no_wa_ortu_edit').val(response.data.no_wa_ortu);
+                    $('#tempat_edit').val(response.data.tempat);
+                    $('#tanggal_lahir_edit').val(response.data.tanggal_lahir);
 
                     var form = document.getElementById("editDataSiswaForm");
                     form.action = `/admin/data-siswa/${itemId}`

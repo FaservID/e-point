@@ -5,6 +5,8 @@
 
 @push('custom-styles')
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css " rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 @endpush
 
 @section('content')
@@ -39,6 +41,7 @@
                                     <th>Kelas</th>
                                     <th>Nama Kelas</th>
                                     <th>Jumlah Siswa</th>
+                                    <th>Wali Kelas</th>
                                     <th>Latest Update</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -58,7 +61,15 @@
 
 @push('custom-scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                dropdownParent: $('#editDataKelas')
+            });
+        });
+    </script>
     <script>
         'use strict';
 
@@ -98,6 +109,10 @@
                     {
                         data: 'jumlah_siswa',
                         className: 'dt-center',
+                    },
+                    {
+                        data: 'wali_kelas',
+                        className: '',
                     },
                     {
                         data: 'latest',
@@ -210,9 +225,10 @@
                 type: "GET",
                 cache: false,
                 success: function(response) {
-
+                    console.log(response.data);
                     $('#kelas_edit').val(response.data.kelas);
                     $('#nama_kelas_edit').val(response.data.nama_kelas);
+                    $('#wali_kelas_edit').val(response.data.user_id);
 
                     var form = document.getElementById("editDataKelasForm");
                     form.action = `/admin/data-kelas/${itemId}`

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDataKelas;
 use App\Http\Requests\UpdateDataKelas;
 use App\Models\Kelas;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -28,16 +29,40 @@ class ClassController extends Controller
                 ->addColumn('nama_kelas', function ($row) {
                     return '<span>' . $row->nama_kelas . '</span>';
                 })
+                ->addColumn('wali_kelas', function ($row) {
+                    return '<span>' . $row->guru?->name . ' </span>';
+                })
                 ->addColumn('jumlah_siswa', function ($row) {
                     return '<span>' . count($row->students) . ' Siswa </span>';
                 })
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['kelas', 'nama_kelas', 'jumlah_siswa', 'latest'])
+                ->rawColumns(['kelas', 'nama_kelas', 'jumlah_siswa', 'latest', 'wali_kelas'])
                 ->toJson();
         }
-        return view('pages.master.data-kelas.index');
+
+        $getTeacher = User::where('is_guru_bk', 'false')->where('type', 0)->get();
+        $kelas = Kelas::all();
+
+        $teachers = [];
+        $teacherIdsInClass = [];
+
+        // Kumpulkan semua user_id dari kelas ke dalam array
+        foreach ($kelas as $kls) {
+            $teacherIdsInClass[] = $kls->user_id;
+        }
+
+        // Loop melalui semua guru
+        foreach ($getTeacher as $teacher) {
+            // Tambahkan guru ke $teacherData jika ID mereka tidak ada dalam $teacherIdsInClass
+            if (!in_array($teacher->id, $teacherIdsInClass)) {
+                $teachers[] = $teacher;
+            }
+        }
+
+        // dd($teachers);
+        return view('pages.master.data-kelas.index', compact('teachers'));
     }
 
     /**
@@ -71,7 +96,7 @@ class ClassController extends Controller
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
 
-            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage());
+            return redirect()->back()->withInput()->withError();
         }
     }
 
@@ -113,10 +138,12 @@ class ClassController extends Controller
             $request->validate([
                 'kelas' => 'required',
                 'nama_kelas' => 'required',
+                'wali_kelas_id' => 'nullable',
             ]);
             $data = [
                 'kelas' => $request->kelas,
                 'nama_kelas' => $request->nama_kelas,
+                'user_id' => $request->wali_kelas,
             ];
 
             Kelas::where('id', $id)->update($data);
@@ -124,7 +151,7 @@ class ClassController extends Controller
             return redirect()->route('data-kelas.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

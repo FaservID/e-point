@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,10 +48,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function kelas(): BelongsTo
+    {
+        return $this->belongsTo(Kelas::class,'id','user_id');
+    }
+
     protected function type(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ["guru", "admin", "headmaster"][$value],
+            get: fn ($value) =>  ["guru", "admin", "eksekutif"][$value],
         );
     }
 }

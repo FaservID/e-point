@@ -19,6 +19,11 @@ class ListPelanggaran extends Model
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class,'student_id','id');
+    }
+
+    public function kategori(): BelongsTo
+    {
+        return $this->belongsTo(KategoriPelanggaran::class);
     }
 }

@@ -63,7 +63,7 @@ class KategoriPelanggaranController extends Controller
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
 
-            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage());
+            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage())->withInput();
         }
     }
 
@@ -112,7 +112,7 @@ class KategoriPelanggaranController extends Controller
             return redirect()->route('kategori-pelanggaran.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

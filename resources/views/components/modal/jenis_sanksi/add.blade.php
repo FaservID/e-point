@@ -10,14 +10,18 @@
                 @method('POST')
                 <div class="modal-body">
                     <div class="form-group mb-2">
-                        <label for="total_poin" class="form-label">Total Point <span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <input type="number" name="total_poin" required id="total_poin" class="form-control"
-                            placeholder="Total Point">
+                        <label for="total_poin" class="form-label">Total Point <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="number" name="total_poin" required id="total_poin" class="form-control" placeholder="Total Point" value="{{ old('total_poin') }}">
+                        @if ($errors->has('total_poin'))
+                            <span class="text-danger">{{ $errors->first('total_poin') }}</span>
+                        @endif
                     </div>
                     <div class="form-group mb-2">
                         <label for="tindakan_sanksi" class="form-label">Tindakan / Sanksi <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
-                        <textarea name="tindakan_sanksi" id="tindakan_sanksi" required cols="30" rows="5" class="form-control"></textarea>
+                        <textarea name="tindakan_sanksi" id="tindakan_sanksi" required cols="30" rows="5" class="form-control">{{ old('tindakan_sanksi') }}</textarea>
+                        @if ($errors->has('tindakan_sanksi'))
+                            <span class="text-danger">{{ $errors->first('tindakan_sanksi') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">

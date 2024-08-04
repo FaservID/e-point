@@ -5,21 +5,23 @@
                 <h4 class="modal-title" id="standard-modalLabel">Tambah Data</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-            <form method="POST" novalidate id="addDataKelasForm" action="{{route('data-kelas.store')}}">
+            <form method="POST" novalidate id="addDataKelasForm" action="{{ route('data-kelas.store') }}">
                 @csrf
                 @method('POST')
                 <div class="modal-body">
                     <div class="form-group mb-2">
-                        <label for="kelas" class="form-label">Kelas <span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <input type="number" name="kelas" required id="kelas" class="form-control"
-                            placeholder="7 / 8 / 9">
+                        <label for="kelas" class="form-label">Kelas <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="number" name="kelas" required id="kelas" class="form-control" placeholder="7 / 8 / 9" value="{{ old('kelas') }}">
+                        @if($errors->has('kelas'))
+                            <span class="text-danger">{{ $errors->first('kelas') }}</span>
+                        @endif
                     </div>
                     <div class="form-group mb-2">
-                        <label for="nama_kelas" class="form-label">Nama Kelas <span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <input type="text" name="nama_kelas" required id="nama_kelas" class="form-control"
-                            placeholder="Masukkan Nama Kelas">
+                        <label for="nama_kelas" class="form-label">Nama Kelas <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="text" name="nama_kelas" required id="nama_kelas" class="form-control" placeholder="Masukkan Nama Kelas" value="{{ old('nama_kelas') }}">
+                        @if($errors->has('nama_kelas'))
+                            <span class="text-danger">{{ $errors->first('nama_kelas') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDataGuru;
 use App\Http\Requests\UpdateDataGuru;
+use App\Models\Kelas;
 use App\Models\Teacher;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,8 +19,9 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
+        $kelas = Kelas::all();
         if ($request->ajax()) {
-            $data = User::where('type','guru')->latest()->get();
+            $data = User::where('type', 0)->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -28,6 +30,9 @@ class TeacherController extends Controller
                 })
                 ->addColumn('name', function ($row) {
                     return '<span>' . $row->name . '</span>';
+                })
+                ->addColumn('kelas_name', function ($row) {
+                    return '<span>' .  $row->kelas?->nama_kelas . '</span>';
                 })
                 ->addColumn('email', function ($row) {
                     return '<span>' . $row->email . '</span>';
@@ -41,10 +46,10 @@ class TeacherController extends Controller
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nip', 'name', 'email', 'jenis_kelamin', 'tanggal_lahir', 'latest'])
+                ->rawColumns(['nip', 'name', 'email', 'jenis_kelamin', 'tanggal_lahir', 'latest', 'kelas_name'])
                 ->toJson();
         }
-        return view('pages.master.data-guru.index');
+        return view('pages.master.data-guru.index', compact('kelas'));
     }
 
     /**
@@ -68,6 +73,7 @@ class TeacherController extends Controller
                 'jenis_kelamin' => 'required',
                 'tanggal_lahir' => 'required',
                 'email' => 'required',
+                'kelas_id' => 'nullable',
             ]);
 
             $data = [
@@ -79,15 +85,15 @@ class TeacherController extends Controller
                 'password' => bcrypt('password'),
                 'type' => 0,
                 'jenis_kelamin' => $request->jenis_kelamin,
+                'kelas_id' => $request->kelas_id,
             ];
 
             User::create($data);
             Alert::success('Yeay🥳', 'Berhasil Menyimpan Data');
-
             return redirect()->route('data-guru.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage());
+            return redirect()->back()->withErrors('Oppss, Something went wrong', $e->getMessage())->withInput();
         }
     }
 
@@ -132,6 +138,7 @@ class TeacherController extends Controller
                 'jenis_kelamin' => 'required',
                 'tanggal_lahir' => 'required',
                 'email' => 'required',
+                'kelas_id' => 'required',
             ]);
 
             $data = [
@@ -141,15 +148,16 @@ class TeacherController extends Controller
                 'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
                 'email' => $request->email,
                 'jenis_kelamin' => $request->jenis_kelamin,
+                'kelas_id' => $request->kelas_id,
             ];
 
-            User::where('id', $id)->update($data);
-
+            $user = User::findOrFail($id);
+            $user->update($data);
             Alert::success('Yeay🥳', 'Berhasil Memperbarui Data');
             return redirect()->route('data-guru.index');
         } catch (\Exception $e) {
             Alert::error('Gagal', $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

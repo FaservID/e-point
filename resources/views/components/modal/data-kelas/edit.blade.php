@@ -5,7 +5,7 @@
                 <h4 class="modal-title" id="standard-modalLabel">Perbarui Data</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-            <form method="POST" novalidate id="editDataKelasForm" >
+            <form method="POST" novalidate id="editDataKelasForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -20,6 +20,16 @@
                                     Diisi</sup></span></label>
                         <input type="text" name="nama_kelas" required id="nama_kelas_edit" class="form-control"
                             placeholder="Masukkan Nama Kelas">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="wali_kelas" class="form-label">Wali Kelas <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <select name="wali_kelas" id="wali_kelas_edit" class="form-control form-select select2">
+                            <option value="" disabled selected>-- Pilih Guru --</option>
+                            @foreach ($teachers as $teacher)
+                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

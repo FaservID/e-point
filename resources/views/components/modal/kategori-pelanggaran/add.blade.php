@@ -1,5 +1,4 @@
-<div id="addKategoriPelanggaran" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addKategoriPelanggaran"
-    aria-hidden="true">
+<div id="addKategoriPelanggaran" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addKategoriPelanggaran" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,18 +10,18 @@
                 @method('POST')
                 <div class="modal-body">
                     <div class="form-group mb-2">
-                        <label for="kategori_pelanggaran" class="form-label">Kategori Pelanggaran <span
-                                class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <input type="text" name="kategori_pelanggaran" required id="kategori_pelanggaran"
-                            class="form-control" placeholder="Masukkan Kategori Pelanggaran">
+                        <label for="kategori_pelanggaran" class="form-label">Kategori Pelanggaran <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="text" name="kategori_pelanggaran" required id="kategori_pelanggaran" class="form-control" placeholder="Masukkan Kategori Pelanggaran" value="{{ old('kategori_pelanggaran') }}">
+                        @if ($errors->has('kategori_pelanggaran'))
+                            <span class="text-danger">{{ $errors->first('kategori_pelanggaran') }}</span>
+                        @endif
                     </div>
                     <div class="form-group mb-2">
-                        <label for="poin" class="form-label">Point <span
-                                class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <input type="number" name="poin" required id="poin"
-                            class="form-control" placeholder="Masukkan Poin">
+                        <label for="poin" class="form-label">Point <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="number" name="poin" required id="poin" class="form-control" placeholder="Masukkan Poin" value="{{ old('poin') }}">
+                        @if ($errors->has('poin'))
+                            <span class="text-danger">{{ $errors->first('poin') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">
