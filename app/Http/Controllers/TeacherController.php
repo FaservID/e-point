@@ -21,18 +21,27 @@ class TeacherController extends Controller
     {
         $kelas = Kelas::all();
         if ($request->ajax()) {
-            $data = User::where('type', 0)->latest()->get();
+            $data = User::where('type', 0)
+                ->leftJoin('kelas', 'kelas.user_id', '=', 'users.id')
+                ->orderByRaw('kelas.nama_kelas IS NULL, kelas.nama_kelas ASC')
+                ->select('users.*')
+                ->where('is_guru_bk', 'false')
+                ->get();
+
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nip', function ($row) {
-                    return '<span>' . $row->nip . '</span>';
+                    return '<span>' . $row->nip == null ? '-' : $row->nip . '</span>';
                 })
                 ->addColumn('name', function ($row) {
                     return '<span>' . $row->name . '</span>';
                 })
+                ->addColumn('jabatan', function ($row) {
+                    return '<span>' . ($row->jabatan ?? '-') . '</span>';
+                })
                 ->addColumn('kelas_name', function ($row) {
-                    return '<span>' .  $row->kelas?->nama_kelas . '</span>';
+                    return '<span>' . ($row->kelas == null ? '-' : $row->kelas->nama_kelas) . '</span>';
                 })
                 ->addColumn('email', function ($row) {
                     return '<span>' . $row->email . '</span>';
@@ -46,7 +55,7 @@ class TeacherController extends Controller
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nip', 'name', 'email', 'jenis_kelamin', 'tanggal_lahir', 'latest', 'kelas_name'])
+                ->rawColumns(['nip', 'name', 'email', 'jenis_kelamin', 'jabatan','tanggal_lahir', 'latest', 'kelas_name'])
                 ->toJson();
         }
         return view('pages.master.data-guru.index', compact('kelas'));
@@ -65,23 +74,26 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $request->validate([
-                'nip' => 'required',
+                'nip' => 'nullable',
                 'name' => 'required',
                 'tempat_lahir' => 'required',
                 'jenis_kelamin' => 'required',
+                'jabatan' => 'required',
                 'tanggal_lahir' => 'required',
                 'email' => 'required',
                 'kelas_id' => 'nullable',
             ]);
 
             $data = [
-                'nip' => $request->nip,
+                'nip' => $request->nip ?? '-',
                 'name' => $request->name,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
                 'email' => $request->email,
+                'jabatan' => $request->jabatan,
                 'password' => bcrypt('password'),
                 'type' => 0,
                 'jenis_kelamin' => $request->jenis_kelamin,
@@ -132,23 +144,23 @@ class TeacherController extends Controller
     {
         try {
             $request->validate([
-                'nip' => 'required',
+                'nip' => 'nullable',
                 'name' => 'required',
                 'tempat_lahir' => 'required',
                 'jenis_kelamin' => 'required',
                 'tanggal_lahir' => 'required',
                 'email' => 'required',
-                'kelas_id' => 'required',
+                'jabatan' => 'required',
             ]);
 
             $data = [
-                'nip' => $request->nip,
+                'nip' => $request->nip ?? '-',
                 'name' => $request->name,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
                 'email' => $request->email,
                 'jenis_kelamin' => $request->jenis_kelamin,
-                'kelas_id' => $request->kelas_id,
+                'jabatan' => $request->jabatan,
             ];
 
             $user = User::findOrFail($id);

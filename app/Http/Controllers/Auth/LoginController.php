@@ -41,27 +41,27 @@ class LoginController extends Controller
     }
 
     public function login(Request $request): RedirectResponse
-    {   
-        $input = $request->all();
-     
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-     
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
-        {
-            if (auth()->user()->type == 'admin') {
-                return redirect()->route('admin.home');
-            }else if (auth()->user()->type == 'eksekutif') {
-                return redirect()->route('eksekutif.home');
-            }else{
-                return redirect()->route('guru.home');
-            }
-        }else{
-            return redirect()->route('login')
-                ->with('error','Email-Address And Password Are Wrong.');
+{
+    $input = $request->all();
+
+    $this->validate($request, [
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (auth()->attempt(['email' => $input['email'], 'password' => $input['password']])) {
+        if (auth()->user()->type == 'admin') {
+            return redirect()->route('admin.home');
+        } elseif (auth()->user()->type == 'eksekutif') {
+            return redirect()->route('eksekutif.home');
+        } else {
+            return redirect()->route('guru.home');
         }
-          
+    } else {
+        return redirect()->route('login')
+            ->withErrors(['login_error' => 'Email address and password are incorrect.'])
+            ->withInput($request->only('email'));
     }
+}
+
 }

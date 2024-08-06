@@ -19,7 +19,7 @@ class ClassController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Kelas::latest()->get();
+            $data = Kelas::orderBy('nama_kelas', 'asc')->latest()->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -30,8 +30,12 @@ class ClassController extends Controller
                     return '<span>' . $row->nama_kelas . '</span>';
                 })
                 ->addColumn('wali_kelas', function ($row) {
-                    return '<span>' . $row->guru?->name . ' </span>';
-                })
+                    if ($row->guru) {
+                        return '<span>' . $row->guru->name . '</span>';
+                    } else {
+                        return '<span>Belum Ada wali kelas</span>';
+                    }
+                })                
                 ->addColumn('jumlah_siswa', function ($row) {
                     return '<span>' . count($row->students) . ' Siswa </span>';
                 })
@@ -65,6 +69,26 @@ class ClassController extends Controller
         return view('pages.master.data-kelas.index', compact('teachers'));
     }
 
+
+    public function resetTeacher($id)
+    {
+        try {
+            $kelas = Kelas::find($id);
+            $kelas->update([
+                'user_id' => null
+            ]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Menghapus Wali Kelas',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Opps, something went wrong',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

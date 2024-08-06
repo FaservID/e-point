@@ -20,7 +20,7 @@ class StudentController extends Controller
         if ($request->ajax()) {
            
 
-            $data = Student::latest();
+            $data = Student::orderBy('nis','asc')->latest();
 
             // Apply 'kelas' filter if it exists in the request
             $kelas = $request->input('kelasFilter');
@@ -40,6 +40,9 @@ class StudentController extends Controller
             
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('nis', function ($row) {
+                    return '<span>' . $row->nis . '</span>';
+                })
                 ->addColumn('nisn', function ($row) {
                     return '<span>' . $row->nisn . '</span>';
                 })
@@ -58,7 +61,7 @@ class StudentController extends Controller
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nisn', 'student_name', 'kelas', 'jenis_kelamin', 'ttl', 'latest'])
+                ->rawColumns(['nisn', 'student_name', 'kelas', 'jenis_kelamin', 'ttl', 'latest','nis'])
                 ->toJson();
         }
         $kelas = Kelas::all();
@@ -92,23 +95,25 @@ class StudentController extends Controller
     {
         try {
             $request->validate([
+                'nis' => 'required',
                 'nisn' => 'required',
                 'nama' => 'required',
                 'alamat' => 'required',
                 'jenis_kelamin' => 'required',
                 'kelas_id' => 'required',
-                'no_wa_ortu' => 'required',
+                // 'no_wa_ortu' => 'required',
                 'tempat' => 'required',
                 'tanggal_lahir' => 'required',
             ]);
     
             $data = [
+                'nis' => $request->nis,
                 'nisn' => $request->nisn,
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'kelas_id' => $request->kelas_id,
-                'no_wa_ortu' => $request->no_wa_ortu,
+                // 'no_wa_ortu' => $request->no_wa_ortu,
                 'tempat' => $request->tempat,
                 'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
             ];
@@ -146,23 +151,25 @@ class StudentController extends Controller
     {
         try {
             $request->validate([
+                'nis' => 'required',
                 'nisn' => 'required',
                 'nama' => 'required',
                 'alamat' => 'required',
                 'jenis_kelamin' => 'required',
                 'kelas_id' => 'required',
-                'no_wa_ortu' => 'required',
+                // 'no_wa_ortu' => 'required',
                 'tempat' => 'required',
                 'tanggal_lahir' => 'required',
             ]);
 
             $data = [
+                'nis' => $request->nis,
                 'nisn' => $request->nisn,
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'kelas_id' => $request->kelas_id,
-                'no_wa_ortu' => $request->no_wa_ortu,
+                // 'no_wa_ortu' => $request->no_wa_ortu,
                 'tempat' => $request->tempat,
                 'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Y-m-d'),
             ];

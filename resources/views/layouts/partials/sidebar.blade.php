@@ -2,22 +2,28 @@
    <div class="leftside-menu">
 
        <!-- Brand Logo Light -->
-       <a href="index.html" class="logo logo-light">
+       <a href="#" class="logo logo-light">
            <span class="logo-lg">
-               <img src="{{ asset('assets') }}/images/logo.png" alt="logo">
+               <div class="d-flex justify-content-center mt-3 align-items-center">
+                   <img src="{{ asset('assets') }}/fe/img/logo.jpeg" alt="logo" class="me-1">
+                   <h5 class="text-white">E-POINT</h5>
+               </div>
            </span>
            <span class="logo-sm">
-               <img src="{{ asset('assets') }}/images/logo-sm.png" alt="small logo">
+               <img src="{{ asset('assets') }}/fe/img/logo.jpeg" alt="small logo">
            </span>
        </a>
 
        <!-- Brand Logo Dark -->
-       <a href="index.html" class="logo logo-dark">
+       <a href="#" class="logo logo-dark">
            <span class="logo-lg">
-               <img src="{{ asset('assets') }}/images/logo-dark.png" alt="dark logo">
+               <div class="d-flex justify-content-center mt-3 align-items-center">
+                   <img src="{{ asset('assets') }}/fe/img/logo.jpeg" alt="Dark logo" class="me-1">
+                   <h5 class="text-white">E-POINT</h5>
+               </div>
            </span>
            <span class="logo-sm">
-               <img src="{{ asset('assets') }}/images/logo-dark-sm.png" alt="small logo">
+               <img src="{{ asset('assets') }}/fe/img/logo.jpeg" alt="small logo">
            </span>
        </a>
 
@@ -65,6 +71,9 @@
                        </a>
                        <div class="collapse" id="sidebarEcommerce">
                            <ul class="side-nav-second-level">
+                               <li>
+                                   <a href="{{ route('data-eksekutif.index') }}">Data Eksekutif</a>
+                               </li>
                                <li>
                                    <a href="{{ route('data-guru.index') }}">Data Guru</a>
                                </li>
@@ -163,7 +172,7 @@
                            <span> List Pelanggaran </span>
                        </a>
                    </li>
-                   
+
                </ul>
                <!--- End Sidemenu -->
            @endif

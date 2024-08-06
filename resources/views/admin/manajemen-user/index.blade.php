@@ -38,6 +38,7 @@
                                     <th style="width: 2%">#</th>
                                     <th>NIP</th>
                                     <th>Guru</th>
+                                    <th>Jabatan</th>
                                     <th>Email</th>
                                     <th>Is Guru BK</th>
                                     <th>L/P</th>
@@ -73,7 +74,7 @@
             let table = $("#data-guru-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
-                ordering: false,
+                ordering: true,
                 scroller: true,
                 serverSide: true,
                 scrollY: '450px',
@@ -92,11 +93,15 @@
                     },
                     {
                         data: 'nip',
-                        className: ''
+                        className: 'dt-center'
                     },
                     {
                         data: 'name',
                         className: ''
+                    },
+                    {
+                        data: 'jabatan',
+                        className: 'dt-center'
                     },
                     {
                         data: 'email',
@@ -234,6 +239,7 @@
                     $('#jenis_kelamin_edit').val(response.data.jenis_kelamin);
                     $('#is_guru_bk_edit').val(response.data.is_guru_bk);
                     $('#kelas_id_edit').val(response.data.kelas_id);
+                    $('#jabatan_edit').val(response.data.jabatan);
                     var type = '';
                     switch(response.data.type) {
                         case 'guru' :

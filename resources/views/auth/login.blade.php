@@ -37,13 +37,20 @@
 
                         <div class="card-body p-4">
 
-                            <div class="text-center w-75 m-auto">
+                            <div class="text-center w-100 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
-                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.
+                                <p class="text-muted mb-2">Enter your email address and password to access admin panel.
                                 </p>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        {{ $errors->first('login_error') }}
+                                    </div>
+                                @endif
+
+
                             </div>
 
-                            <form action="{{ route('login') }}" method="POST">
+                            <form action="{{ route('login') }}" method="POST" class="mt-3">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="emailaddress" class="form-label">Email address</label>
@@ -83,7 +90,7 @@
                                 </div> --}}
 
                                 <div class="mb-3 mb-0 text-center w-100">
-                                    <button class="btn btn-primary" type="submit"> Log In </button>
+                                    <button class="btn btn-primary w-100" type="submit"> Log In </button>
                                 </div>
 
                             </form>

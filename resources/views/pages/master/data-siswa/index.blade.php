@@ -52,6 +52,7 @@
                             <thead>
                                 <tr class="text-center">
                                     <th style="width: 2%">#</th>
+                                    <th>NIS</th>
                                     <th>NISN</th>
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
@@ -94,7 +95,7 @@
             let table = $("#data-siswa-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
-                ordering: false,
+                ordering: true,
                 scroller: true,
                 serverSide: true,
                 scrollY: '450px',
@@ -110,6 +111,10 @@
                         render: function(data, type, full, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
+                    },
+                    {
+                        data: 'nis',
+                        className: ''
                     },
                     {
                         data: 'nisn',
@@ -258,6 +263,7 @@
                 success: function(response) {
                     console.log(response.data);
 
+                    $('#nis_edit').val(response.data.nis);
                     $('#nisn_edit').val(response.data.nisn);
                     $('#nama_edit').val(response.data.nama);
                     $('#alamat_edit').val(response.data.alamat);
@@ -266,7 +272,7 @@
 
                     // Set the selected value for kelas_id
                     $('#kelas_id_edit').val(response.data.kelas_id);
-                    $('#no_wa_ortu_edit').val(response.data.no_wa_ortu);
+                    // $('#no_wa_ortu_edit').val(response.data.no_wa_ortu);
                     $('#tempat_edit').val(response.data.tempat);
                     $('#tanggal_lahir_edit').val(response.data.tanggal_lahir);
 

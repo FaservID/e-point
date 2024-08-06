@@ -10,8 +10,15 @@
                 @method('POST')
                 <div class="modal-body">
                     <div class="form-group mb-2">
+                        <label for="nis" class="form-label">NIS <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <input type="number" name="nis" required id="nis" class="form-control" placeholder="Masukkan NIS" value="{{ old('nis') }}">
+                        @if ($errors->has('nis'))
+                            <span class="text-danger">{{ $errors->first('nis') }}</span>
+                        @endif
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="nisn" class="form-label">NISN <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
-                        <input type="text" name="nisn" required id="nisn" class="form-control" placeholder="Masukkan NISN" value="{{ old('nisn') }}">
+                        <input type="number" name="nisn" required id="nisn" class="form-control" placeholder="Masukkan NISN" value="{{ old('nisn') }}">
                         @if ($errors->has('nisn'))
                             <span class="text-danger">{{ $errors->first('nisn') }}</span>
                         @endif
@@ -67,13 +74,13 @@
                             <span class="text-danger">{{ $errors->first('kelas_id') }}</span>
                         @endif
                     </div>
-                    <div class="form-group mb-2">
+                    {{-- <div class="form-group mb-2">
                         <label for="no_wa_ortu" class="form-label">Nomor Whatsapp Orang Tua <span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
                         <input type="text" name="no_wa_ortu" required id="no_wa_ortu" class="form-control" placeholder="082122112211" value="{{ old('no_wa_ortu') }}">
                         @if ($errors->has('no_wa_ortu'))
                             <span class="text-danger">{{ $errors->first('no_wa_ortu') }}</span>
                         @endif
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

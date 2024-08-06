@@ -9,5 +9,5 @@ class KategoriPelanggaran extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kategori_pelanggaran', 'poin'];
+    protected $fillable = ['kategori_pelanggaran', 'poin','sanksi'];
 }

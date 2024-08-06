@@ -38,6 +38,7 @@
                                     <th style="width: 2%">#</th>
                                     <th>NIP</th>
                                     <th>Nama Guru</th>
+                                    <th>Jabatan</th>
                                     <th>Wali Kelas</th>
                                     <th>Email</th>
                                     <th>L/P</th>
@@ -73,7 +74,7 @@
             let table = $("#data-guru-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
-                ordering: false,
+                ordering: true,
                 scroller: true,
                 serverSide: true,
                 scrollY: '450px',
@@ -92,11 +93,15 @@
                     },
                     {
                         data: 'nip',
-                        className: ''
+                        className: 'dt-center'
                     },
                     {
                         data: 'name',
                         className: ''
+                    },
+                    {
+                        data: 'jabatan',
+                        className: 'dt-center'
                     },
                     {
                         data: 'kelas_name',
@@ -233,6 +238,7 @@
                     $('#tempat_lahir_edit').val(response.data.tempat_lahir);
                     $('#tanggal_lahir_edit').val(response.data.tanggal_lahir);
                     $('#jenis_kelamin_edit').val(response.data.jenis_kelamin);
+                    $('#jabatan_edit').val(response.data.jabatan);
 
                     var form = document.getElementById("editDataGuruForm");
                     form.action = `/admin/data-guru/${itemId}`

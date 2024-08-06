@@ -16,7 +16,7 @@ class JenisSanksiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = JenisSanksi::latest()->get();
+            $data = JenisSanksi::orderBy('total_poin','asc')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

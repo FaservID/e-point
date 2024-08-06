@@ -38,6 +38,7 @@
                                     <th style="width: 2%">#</th>
                                     <th>Kategori Pelanggaran</th>
                                     <th>Poin</th>
+                                    <th>Sanksi Tindakan</th>
                                     <th>Last Update</th>
                                     @if (auth()->user()->type == 'admin')
                                         <th>Aksi</th>
@@ -71,7 +72,7 @@
             let table = $("#kategori-pelanggaran-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
-                ordering: false,
+                ordering: true,
                 scroller: true,
                 serverSide: true,
                 scrollY: '450px',
@@ -94,6 +95,10 @@
                     },
                     {
                         data: 'poin',
+                        className: 'dt-center'
+                    },
+                    {
+                        data: 'sanksi',
                         className: 'dt-center'
                     },
                     {
@@ -216,6 +221,7 @@
 
                     $('#kategori_pelanggaran_edit').val(response.data.kategori_pelanggaran);
                     $('#poin_edit').val(response.data.poin);
+                    $('#sanksi_edit').val(response.data.sanksi);
 
                     var form = document.getElementById("editKategoriPelanggaranForm");
                     form.action = `/admin/kategori-pelanggaran/${id}`

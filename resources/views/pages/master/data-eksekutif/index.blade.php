@@ -1,11 +1,10 @@
 @extends('layouts.main')
 
 
-@section('title', 'List Pelanggaran')
+@section('title', 'Data Siswa')
 
 @push('custom-styles')
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css " rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -16,10 +15,10 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                        <li class="breadcrumb-item active">List Pelanggaran</li>
+                        <li class="breadcrumb-item active">Data Eksekutif</li>
                     </ol>
                 </div>
-                {{-- <h4 class="page-title">Kategori Pelanggaran</h4> --}}
+                {{-- <h4 class="page-title">Data Eksekutif</h4> --}}
 
             </div>
         </div>
@@ -27,51 +26,24 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <h5 class="card-title">List Pelanggaran</h5>
+                        <h5 class="card-title">List Data Eksekutif</h5>
                     </div>
-                    @if (auth()->user()->is_guru_bk == 'true' || auth()->user()->type == 'admin' || auth()->user()->type == 'eksekutif')
-
-                    <div class="d-flex justify-content-between align-items-center row py-2 gap-3 gap-md-0">
-                        <div class="col-md-6 siswa_filter">
-                            <!-- Dropdown untuk kategori proyek -->
-                            <label for="siswaFilter" class="form-label">Filter by Siswa</label>
-                            <select id="siswaFilter" name="kelas" class="form-select select2Filter">
-                                <option value="">All</option>
-                                @foreach ($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 kelas_filter">
-                            <!-- Dropdown untuk kategori proyek -->
-                            <label for="kelasFilter" class="form-label">Filter by Kelas</label>
-                            <select id="kelasFilter" name="kelas" class="form-select select2Filter">
-                                <option value="">All</option>
-                                @foreach ($kelas as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_kelas }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="list-pelanggaran-datatables"
+                        <table id="data-guru-datatables"
                             class="table table-bordered table-striped dt-responsive nowrap w-100">
                             <thead>
                                 <tr class="text-center">
                                     <th style="width: 2%">#</th>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama Siswa</th>
-                                    <th>Kelas</th>
-                                    <th>Kategori Pelanggaran</th>
-                                    <th>Catatan</th>
-                                    <th>Dibuat Pada</th>
-                                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
+                                    <th>NIP</th>
+                                    <th>Nama</th>
+                                    <th>Jabatan</th>
+                                    <th>Email</th>
+                                    <th>L/P</th>
+                                    <th>TTL</th>
+                                    <th>Latest Update</th>
                                     <th>Aksi</th>
-                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,32 +54,23 @@
             </div>
         </div>
     </div>
-    @include('components.modal.list-pelanggaran.add')
-    @include('components.modal.list-pelanggaran.edit')
+    @include('components.modal.data-eksekutif.add')
+    @include('components.modal.data-eksekutif.edit')
 
 @endsection
 
 @push('custom-scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         'use strict';
 
         // Datatbles server-side
         $(document).ready(function() {
-            $('.select2').select2({
-                dropdownParent: $('#addListPelanggaran')
-            });
-            $('.select2Filter').select2();
-            $('.select2Edit').select2({
-                dropdownParent: $('#editListPelanggaran')
-            });
-
             var d = new Date();
             var l = d.getDate() + '_' + (d.getMonth() + 1) + '_' + d
                 .getFullYear();
-            let table = $("#list-pelanggaran-datatables").DataTable({
+            let table = $("#data-guru-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
                 ordering: true,
@@ -128,68 +91,59 @@
                         }
                     },
                     {
-                        data: 'nis',
+                        data: 'nip',
                         className: ''
                     },
                     {
-                        data: 'nisn',
+                        data: 'name',
                         className: ''
                     },
                     {
-                        data: 'student_name',
+                        data: 'jabatan',
                         className: ''
                     },
                     {
-                        data: 'kelas',
+                        data: 'email',
                         className: 'dt-center',
                     },
                     {
-                        data: 'kategori_pelanggaran',
+                        data: 'jenis_kelamin',
                         className: 'dt-center',
                     },
                     {
-                        data: 'catatan',
-                        className: '',
+                        data: 'tanggal_lahir',
+                        className: 'dt-center',
                     },
                     {
                         data: 'latest',
                         className: 'dt-center',
                     },
-                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
-                        {
-                            data: null,
-                            className: 'dt-center',
-                        },
-                    @endif
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        className: 'dt-center dt-nowrap'
+                    }
                 ],
                 pageLength: 10,
-                columnDefs: [
-                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
-                        {
-                            targets: 8,
-                            searchable: false,
-                            title: 'Actions',
-                            className: 'dt-center',
-                            orderable: false,
-                            render: function(data, type, full) {
-                                var id = full['id'];
-                                var editButton =
-                                    `<a href="javascript:void(0)" id="btn-edit" data-id="${id}" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-application-edit"></i>`
-                                var deleteButton =
-                                    `<a href="javascript:void(0)" class="btn btn-danger btn-sm me-1" onclick="showDeleteConfirmation(${id})"><i class="mdi mdi-trash-can"></i>`
-                                if (full['status'] == 'true') {
-                                    return '<button class="btn btn-sm btn-success"><i class="mdi mdi-check me-1"></i>Closed</button>';
-                                } else {
-                                    return (
-                                        '<span class="text-nowrap text-center">' + editButton +
-                                        deleteButton + '</span>'
-                                    );
-
-                                }
-                            }
-                        },
-                    @endif
-                ],
+                columnDefs: [{
+                    targets: -1,
+                    searchable: false,
+                    title: 'Actions',
+                    className: 'dt-center',
+                    orderable: false,
+                    render: function(data, type, full) {
+                        var id = full['id'];
+                        var editButton =
+                            `<a href="javascript:void(0)" id="btn-edit" data-id="${id}" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-application-edit"></i>`
+                        var deleteButton =
+                            `<a href="javascript:void(0)" class="btn btn-danger btn-sm me-1" onclick="showDeleteConfirmation(${id})"><i class="mdi mdi-trash-can"></i>`
+                        return (
+                            '<span class="text-nowrap text-center">' + editButton +
+                            deleteButton  +'</span>'
+                        );
+                    }
+                }, ],
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -238,19 +192,17 @@
                             }
                         ]
                     },
-                    @if (auth()->user()->type == 'guru' && auth()->user()->is_guru_bk == 'true')
-                        {
-                            text: 'New Data',
-                            className: 'btn btn-sm btn-primary mb-3 mb-md-0 ms-2',
-                            attr: {
-                                'data-bs-toggle': 'modal',
-                                'data-bs-target': '#addListPelanggaran'
-                            },
-                            init: function() {
-                                $(this).removeClass('btn-secondary');
-                            }
+                    {
+                        text: 'New Data',
+                        className: 'btn btn-sm btn-primary mb-3 mb-md-0 ms-2',
+                        attr: {
+                            'data-bs-toggle': 'modal',
+                            'data-bs-target': '#addDataEksekutif'
+                        },
+                        init: function() {
+                            $(this).removeClass('btn-secondary');
                         }
-                    @endif
+                    }
                 ],
                 "footerCallback": function(row, data, start, end, display) {
                     var api = this.api();
@@ -260,37 +212,39 @@
 
             });
             $('.dt-buttons > .btn-group > button').removeClass('btn-secondary');
-
-            $('#siswaFilter, #kelasFilter').change(function() {
-                var siswaFilter = $('#siswaFilter').val();
-                var kelasFilter = $('#kelasFilter').val();
-                // Memperbarui parameter ajax untuk filtering
-                table.ajax.url('{{ url()->current() }}?kelasFilter=' + kelasFilter + '&siswaFilter=' + siswaFilter).load();
-            });
         });
         $('body').on('click', '#btn-edit', function() {
             let itemId = $(this).data('id');
-            console.log(itemId);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: `/list-pelanggaran/get/${itemId}/data`,
+                url: `/admin/data-guru/get/${itemId}/data`,
                 type: "GET",
                 cache: false,
                 success: function(response) {
-                    const id = response.data.id;
+                    console.log(response.data);
 
-                    $('#student_id_edit').val(response.data.student_id);
-                    $('#kategori_id_edit').val(response.data.kategori_id);
-                    $('#catatan_edit').val(response.data.catatan);
+                    $('#nip_edit').val(response.data.nip);
+                    $('#name_edit').val(response.data.name);
+                    $('#email_edit').val(response.data.email);
+                    $('#tempat_lahir_edit').val(response.data.tempat_lahir);
+                    $('#tanggal_lahir_edit').val(response.data.tanggal_lahir);
+                    $('#jenis_kelamin_edit').val(response.data.jenis_kelamin);
+                    $('#jabatan_edit').val(response.data.jabatan);
 
-                    var form = document.getElementById("editListPelanggaranForm");
-                    form.action = `/list-pelanggaran/update/${id}`
+                    var form = document.getElementById("editDataEksekutifForm");
+                    form.action = `/admin/data-eksekutif/${itemId}`
 
-                    $('#editListPelanggaran').modal('show');
+                    $('#editDataEksekutif').modal('show');
                 }
             });
         });
 
         function showDeleteConfirmation(id) {
+            console.log(id);
             Swal.fire({
                 title: 'Are You Sure?',
                 text: 'Data yang terhapus akan hilang secara permanent?',
@@ -307,7 +261,7 @@
                         }
                     });
                     $.ajax({
-                        url: `/list-pelanggaran/${id}`,
+                        url: `/admin/data-eksekutif/${id}`,
                         type: 'DELETE',
                         cache: false,
                         success: function(response) {
@@ -320,7 +274,7 @@
                                     timer: 2000,
                                 }).then((result) => {
                                     window.location.href =
-                                        "{{ route('guru.list-pelanggaran.index') }}"
+                                        "{{ route('data-eksekutif.index') }}"
                                 });
                             } else {
                                 Swal.fire({

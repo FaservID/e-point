@@ -22,6 +22,12 @@
                             placeholder="Masukkan Nama Guru">
                     </div>
                     <div class="form-group mb-2">
+                        <label for="jabatan" class="form-label">Jabatan <span class="text-danger">*<sup>) Harap
+                                    Diisi</sup></span></label>
+                        <input type="text" name="jabatan" required id="jabatan_edit" class="form-control"
+                            placeholder="Masukkan Jabatan" value="{{ old('jabatan') }}">
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="email" class="form-label">Email <span class="text-danger">*<sup>) Harap
                                     Diisi</sup></span></label>
                         <input type="email" name="email" required id="email_edit" class="form-control"

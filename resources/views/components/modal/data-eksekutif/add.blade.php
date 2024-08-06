@@ -1,12 +1,12 @@
-<div id="addDataGuru" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addDataGuru" aria-hidden="true">
+<div id="addDataEksekutif" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addDataEksekutif" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="standard-modalLabel">Tambah Data</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-            <form method="POST" novalidate id="addDataGuruForm"
-                action="{{ request()->routeIs('manajemen-user.index') ? route('manajemen-user.store') : route('data-guru.store') }}">
+            <form method="POST" novalidate id="addDataEksekutifForm"
+                action="{{ route('data-eksekutif.store') }}">
                 @csrf
                 @method('POST')
                 <div class="modal-body">
@@ -57,40 +57,6 @@
                                 Perempuan</option>
                         </select>
                     </div>
-                    {{-- <div class="form-group mb-2">
-                        <label for="kelas_id" class="form-label">Wali Kelas <span class="text-danger">*<sup>) Harap
-                                    Diisi</sup></span></label>
-                        <select name="kelas_id" id="kelas_id" class="form-control form-select">
-                            <option value="" disabled selected>-- Pilih Kelas --</option>
-                            @foreach ($kelas as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ old('kelas_id') == $item->id ? 'selected' : '' }}>{{ $item->nama_kelas }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div> --}}
-                    @if (request()->routeIs('manajemen-user.index'))
-                        <div class="form-group mb-2">
-                            <label for="is_guru_bk" class="form-label">Is Guru BK <span class="text-danger">*<sup>)
-                                        Harap Diisi</sup></span></label>
-                            <select name="is_guru_bk" id="is_guru_bk" class="form-control form-select">
-                                <option value="" disabled selected>-- Pilih Opsi --</option>
-                                <option value="true" {{ old('is_guru_bk') == 'true' ? 'selected' : '' }}>Iya</option>
-                                <option value="false" {{ old('is_guru_bk') == 'false' ? 'selected' : '' }}>Tidak
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="type" class="form-label">Role Akun <span class="text-danger">*<sup>) Harap
-                                        Diisi</sup></span></label>
-                            <select name="type" id="type" class="form-control form-select">
-                                <option value="" disabled selected>-- Pilih Opsi --</option>
-                                <option value="0" {{ old('type') == '0' ? 'selected' : '' }}>Guru</option>
-                                <option value="1" {{ old('type') == '1' ? 'selected' : '' }}>Admin</option>
-                                <option value="2" {{ old('type') == '2' ? 'selected' : '' }}>Eksekutif</option>
-                            </select>
-                        </div>
-                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -105,7 +71,7 @@
 @if ($errors->any())
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#addDataGuru').modal('show');
+            $('#addDataEksekutif').modal('show');
         });
     </script>
 @endif

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\EksekutifController;
 use App\Http\Controllers\HariBelajarController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InisiasiJadwalController;
@@ -79,11 +80,14 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
 
     Route::get('/home', [HomeController::class, 'adminHome'])->name('admin.home');
     Route::resource('data-guru', TeacherController::class);
-    Route::get('data-guru/get/{id}/data', [TeacherController::class, 'getData'])->name('data-guru.get_data');
+    Route::resource('data-eksekutif', EksekutifController::class);
+    Route::get('data-guru/get/{id}/data', [EksekutifController::class, 'getData'])->name('data-eksekutif.get_data');
+    Route::get('data-eksekutif/get/{id}/data', [TeacherController::class, 'getData'])->name('data-guru.get_data');
     Route::resource('data-siswa', StudentController::class);
     Route::get('data-siswa/get/{id}/data', [StudentController::class, 'getData'])->name('data-siswa.get_data');
     Route::resource('data-kelas', ClassController::class);
     Route::get('data-kelas/get/{id}/data', [ClassController::class, 'getData'])->name('data-kelas.get_data');
+    Route::match(['put'],'data-kelas/reset-teacher/{id}', [ClassController::class, 'resetTeacher'])->name('data-kelas.reset');
     Route::resource('kategori-pelanggaran', KategoriPelanggaranController::class);
     Route::get('kategori-pelanggaran/get/{id}/data', [KategoriPelanggaranController::class, 'getData'])->name('kategori-pelanggaran.get_data');
     Route::resource('jenis-sanksi', JenisSanksiController::class);

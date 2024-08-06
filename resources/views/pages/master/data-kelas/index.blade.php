@@ -6,7 +6,6 @@
 @push('custom-styles')
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css " rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
 @endpush
 
 @section('content')
@@ -81,7 +80,7 @@
             let table = $("#data-kelas-datatables").DataTable({
                 ajax: '{{ url()->current() }}',
                 processing: true,
-                ordering: false,
+                ordering: true,
                 scroller: true,
                 serverSide: true,
                 scrollY: '450px',
@@ -112,7 +111,7 @@
                     },
                     {
                         data: 'wali_kelas',
-                        className: '',
+                        className: 'dt-center',
                     },
                     {
                         data: 'latest',
@@ -138,9 +137,12 @@
                             `<a href="javascript:void(0)" id="btn-edit" data-id="${id}" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-application-edit"></i>`
                         var deleteButton =
                             `<a href="javascript:void(0)" class="btn btn-danger btn-sm me-1" onclick="showDeleteConfirmation(${id})"><i class="mdi mdi-trash-can"></i>`
+                        var resetTeacherButton =
+                            `<a href="javascript:void(0)" class="btn btn-primary btn-sm me-1" onclick="showResetConfirmation(${id})"><i class="mdi mdi-refresh"></i>`
+
                         return (
                             '<span class="text-nowrap text-center">' + editButton +
-                            deleteButton + '</span>'
+                            deleteButton +  resetTeacherButton + '</span>'
                         );
                     }
                 }, ],
@@ -258,6 +260,62 @@
                     $.ajax({
                         url: `/admin/data-kelas/${id}`,
                         type: 'DELETE',
+                        cache: false,
+                        success: function(response) {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Yeay 🥳',
+                                    text: response.message,
+                                    timerProgressBar: true,
+                                    timer: 2000,
+                                }).then((result) => {
+                                    window.location.href =
+                                        "{{ route('data-kelas.index') }}"
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oppss, Something went wrong',
+                                    text: response.message,
+                                    timerProgressBar: true,
+                                    timer: 2000,
+                                })
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Oppss, Something went wrong!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function showResetConfirmation(id) {
+            Swal.fire({
+                title: 'Are You Sure?',
+                text: 'Hapus Wali Kelas ini?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reset',
+                cancelButtonText: 'Batal',
+                focusConfirm: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: `/admin/data-kelas/reset-teacher/${id}`,
+                        type: 'PUT',
                         cache: false,
                         success: function(response) {
                             if (response.status == 200) {

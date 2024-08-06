@@ -23,6 +23,13 @@
                             <span class="text-danger">{{ $errors->first('poin') }}</span>
                         @endif
                     </div>
+                    <div class="form-group mb-2">
+                        <label for="sanksi" class="form-label">Sanksi Tindakan<span class="text-danger">*<sup>) Harap Diisi</sup></span></label>
+                        <textarea name="sanksi" id="sanksi" required cols="30" rows="5" class="form-control">{{ old('sanksi') }}</textarea>
+                        @if ($errors->has('sanksi'))
+                            <span class="text-danger">{{ $errors->first('sanksi') }}</span>
+                        @endif
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

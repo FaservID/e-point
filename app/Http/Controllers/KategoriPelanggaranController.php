@@ -17,7 +17,7 @@ class KategoriPelanggaranController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = KategoriPelanggaran::latest()->get();
+            $data = KategoriPelanggaran::get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -27,10 +27,13 @@ class KategoriPelanggaranController extends Controller
                 ->addColumn('poin', function ($row) {
                     return '<span>' . $row->poin . ' Point </span>';
                 })
+                ->addColumn('sanksi', function ($row) {
+                    return '<span>' . $row->sanksi . ' </span>';
+                })
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['kategori', 'poin', 'latest'])
+                ->rawColumns(['kategori', 'poin', 'latest', 'sanksi'])
                 ->toJson();
         }
         return view('admin.kategori-pelanggaran.index');
@@ -54,9 +57,15 @@ class KategoriPelanggaranController extends Controller
             $request->validate([
                 'kategori_pelanggaran' => 'required',
                 'poin' => 'required',
+                'sanksi' => 'required',
             ]);
 
-            KategoriPelanggaran::create($request->all());
+            $data = [
+                'kategori_pelanggaran' => $request->kategori_pelanggaran,
+                'poin' => $request->poin,
+                'sanksi' => $request->sanksi,
+            ];
+            KategoriPelanggaran::create($data);
             Alert::success('Yeay🥳', 'Berhasil Menyimpan Data');
 
             return redirect()->route('kategori-pelanggaran.index');
@@ -104,9 +113,15 @@ class KategoriPelanggaranController extends Controller
             $request->validate([
                 'kategori_pelanggaran' => 'required',
                 'poin' => 'required',
+                'sanksi' => 'required',
             ]);
 
-            $kategoriPelanggaran->update($request->all());
+            $data = [
+                'kategori_pelanggaran' => $request->kategori_pelanggaran,
+                'poin' => $request->poin,
+                'sanksi' => $request->sanksi,
+            ];
+            $kategoriPelanggaran->update($data);
 
             Alert::success('Yeay🥳', 'Berhasil Memperbarui Data');
             return redirect()->route('kategori-pelanggaran.index');
@@ -123,10 +138,10 @@ class KategoriPelanggaranController extends Controller
     {
         try {
             $kategoriPelanggaran->delete();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Data Berhasil Dihapus',
-                ]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data Berhasil Dihapus',
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,

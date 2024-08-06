@@ -26,6 +26,9 @@ class ListPelanggaranController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('nis', function ($row) {
+                    return '<span>' . $row->student->nis . '</span>';
+                })
                 ->addColumn('nisn', function ($row) {
                     return '<span>' . $row->student->nisn . '</span>';
                 })
@@ -54,7 +57,7 @@ class ListPelanggaranController extends Controller
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->updated_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nisn', 'student_name', 'kelas', 'catatan', 'latest', 'kategori_pelanggaran', 'status_pelanggaran'])
+                ->rawColumns(['nis','nisn', 'student_name', 'kelas', 'catatan', 'latest', 'kategori_pelanggaran', 'status_pelanggaran'])
                 ->toJson();
         }
         return view('admin.list-pelanggaran.index');
@@ -89,6 +92,9 @@ class ListPelanggaranController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('nis', function ($row) {
+                    return '<span>' . $row->student->nis . '</span>';
+                })
                 ->addColumn('nisn', function ($row) {
                     return '<span>' . $row->student->nisn . '</span>';
                 })
@@ -107,7 +113,7 @@ class ListPelanggaranController extends Controller
                 ->addColumn('latest', function ($row) {
                     return '<span>' . Carbon::parse($row->created_at)->format('d F Y, H:i A') . '</span>';
                 })
-                ->rawColumns(['nisn', 'student_name', 'kelas', 'catatan', 'latest', 'kategori_pelanggaran'])
+                ->rawColumns(['nis','nisn', 'student_name', 'kelas', 'catatan', 'latest', 'kategori_pelanggaran'])
                 ->toJson();
         }
         $students = Student::all();
